@@ -1,0 +1,21 @@
+README
+
+Note:
+
+Due to the large size of the project (over 1 GB) and very slow upload speeds (around 15–16 hours), I have uploaded only the essential project files along with
+working screenshots for reference** and a guide to run the project locally.
+
+Instructions to Run:
+
+1. Download this GitHub project folder locally.
+2. Open a terminal and navigate to the project directory.
+3. Run the following commands:
+
+   ```bash
+    npm install
+    npm start
+    ```
+
+The node_modules folder has not been uploaded because it is very large, so running npm install will automatically set up all required dependencies.
+
+I have already demonstrated the working project to the jury, and the uploaded screenshots showcase the expected output for reference.

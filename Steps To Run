@@ -1,0 +1,41 @@
+Steps to Run the Project
+
+1. Setup
+
+1. Copy the MindfulCampus folder to your local system.
+
+2. Open Terminal and navigate to the project directory.
+
+3. Run the following command:
+
+   ```bash
+   npm start
+   ```
+
+4. Once the project starts, you will be redirected to:
+   [http://localhost:3000](http://localhost:3000)
+
+
+2. Usage
+
+Main Dashboard
+
+After starting the project, you will land on the main dashboard.
+
+Typing Example
+
+Go to the Typing-Examples file to see sample text inputs you can try.
+
+Browser Extension
+
+Open Chrome and load the `browser-extension` folder as an unpacked extension.
+This will allow monitoring of social media activity (e.g., Facebook, Instagram).
+
+AI Typing Pattern Analysis – Live Demo
+
+Open `typing-demo.html` to view live AI typing pattern analysis.
+
+Crisis Intervention Demo
+
+Open `crisis-demo.html` to explore the **MindfulCampus Crisis Intervention** feature.
+
