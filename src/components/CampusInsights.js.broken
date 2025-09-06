@@ -1,0 +1,205 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Button,
+  Chip,
+  Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Paper,
+  Slider,
+  Switch,
+  FormControlLabel,
+  Tooltip,
+  IconButton
+} from '@mui/material';
+import {
+  School,
+  TrendingUp,
+  TrendingDown,
+  Warning,
+  Info,
+  Psychology,
+  Groups,
+  Schedule,
+  LocationOn,
+  FilterList,
+  Download,
+  Refresh,
+  Visibility,
+  VisibilityOff
+} from '@mui/icons-material';
+import { 
+  ComposedChart, 
+  Line, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip as RechartsTooltip, 
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  AreaChart,
+  Area,
+  ScatterChart,
+  Scatter,
+  Legend,
+  LineChart
+} from 'recharts';
+
+const CampusInsights = () => {
+  const [selectedTimeframe, setSelectedTimeframe] = useState('week');
+  const [selectedDepartment, setSelectedDepartment] = useState('all');
+  const [selectedMetric, setSelectedMetric] = useState('mood');
+  const [anonymousView, setAnonymousView] = useState(true);
+  const [riskThreshold, setRiskThreshold] = useState(30);
+
+  // Mock campus-wide data
+  const [campusStats] = useState({
+    totalStudents: 12847,
+    activeUsers: 3421,
+    averageMoodScore: 6.8,
+    stressLevel: 'Moderate',
+    interventionsTriggered: 247,
+    supportGroupSessions: 34,
+    campusEvents: 12,
+    counselingAppointments: 89
+  });
+
+  // Mock mood trends by time
+  const moodTrendsData = [
+    { time: '6 AM', mood: 5.2, stress: 3.1, activity: 12 },
+    { time: '8 AM', mood: 6.1, stress: 4.2, activity: 45 },
+    { time: '10 AM', mood: 7.2, stress: 5.8, activity: 89 },
+    { time: '12 PM', mood: 6.8, stress: 6.2, activity: 156 },
+    { time: '2 PM', mood: 6.5, stress: 7.1, activity: 134 },
+    { time: '4 PM', mood: 5.9, stress: 7.8, activity: 98 },
+    { time: '6 PM', mood: 6.3, stress: 6.9, activity: 76 },
+    { time: '8 PM', mood: 7.1, stress: 5.4, activity: 67 },
+    { time: '10 PM', mood: 6.9, stress: 4.8, activity: 34 },
+    { time: '12 AM', mood: 5.8, stress: 3.9, activity: 18 }
+  ];
+
+  // Mock departmental data
+  const departmentData = [
+    { department: 'Computer Science', students: 2340, avgMood: 6.2, stressLevel: 7.8, riskLevel: 'Medium' },
+    { department: 'Engineering', students: 1890, avgMood: 6.5, stressLevel: 7.5, riskLevel: 'Medium' },
+    { department: 'Business', students: 2120, avgMood: 7.1, stressLevel: 6.2, riskLevel: 'Low' },
+    { department: 'Psychology', students: 1560, avgMood: 7.8, stressLevel: 5.9, riskLevel: 'Low' },
+    { department: 'Medicine', students: 980, avgMood: 5.8, stressLevel: 8.7, riskLevel: 'High' },
+    { department: 'Liberal Arts', students: 1780, avgMood: 7.3, stressLevel: 6.1, riskLevel: 'Low' },
+    { department: 'Sciences', students: 1340, avgMood: 6.7, stressLevel: 7.2, riskLevel: 'Medium' }
+  ];
+
+  // Mock high-risk students indicators (anonymized)
+  const riskIndicators = [
+    {
+      id: 'area_1',
+      location: 'Library - 3rd Floor',
+      count: 8,
+      severity: 'High',
+      timeframe: 'Last 24h',
+      interventions: 3,
+      type: 'Academic Stress'
+    },
+    {
+      id: 'area_2', 
+      location: 'Engineering Building',
+      count: 12,
+      severity: 'Medium',
+      timeframe: 'Last 48h',
+      interventions: 7,
+      type: 'Exam Anxiety'
+    },
+    {
+      id: 'area_3',
+      location: 'Student Dormitories',
+      count: 6,
+      severity: 'High',
+      timeframe: 'Last 12h',
+      interventions: 2,
+      type: 'Social Isolation'
+    }
+  ];
+
+  // Mock intervention effectiveness data
+  const interventionData = [
+    { type: 'Breathing Exercises', success: 87, attempts: 234, satisfaction: 8.2 },
+    { type: 'Peer Support', success: 92, attempts: 189, satisfaction: 8.7 },
+    { type: 'Mindfulness', success: 79, attempts: 156, satisfaction: 7.9 },
+    { type: 'Physical Activity', success: 84, attempts: 143, satisfaction: 8.1 },
+    { type: 'Time Management', success: 76, attempts: 198, satisfaction: 7.6 }
+  ];
+
+  // Mock campus events correlation
+  const eventsCorrelation = [
+    { event: 'Midterm Exams', impact: -1.2, date: '2024-03-15', affected: 67 },
+    { event: 'Spring Break', impact: +2.1, date: '2024-03-22', affected: 89 },
+    { event: 'Career Fair', impact: -0.8, date: '2024-03-28', affected: 45 },
+    { event: 'Finals Week', impact: -2.3, date: '2024-04-15', affected: 92 },
+    { event: 'Graduation', impact: +1.8, date: '2024-05-12', affected: 78 }
+  ];
+
+  const getRiskColor = (risk) => {
+    const colors = {
+      'Low': '#4caf50',
+      'Medium': '#ff9800', 
+      'High': '#f44336'
+    };
+    return colors[risk] || '#9e9e9e';
+  };
+
+  const getSeverityIcon = (severity) => {
+    switch(severity) {
+      case 'High': return <Warning sx={{ color: '#f44336' }} />;
+      case 'Medium': return <Info sx={{ color: '#ff9800' }} />;
+      default: return <Info sx={{ color: '#4caf50' }} />;
+    }
+  };
+
+  const COLORS = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'];
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            Campus Mental Health Insights 📊
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Anonymous campus-wide mental wellness analytics and trend monitoring
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button startIcon={<Download />} variant="outlined">
+            Export Report
+          </Button>
+          <Button startIcon={<Refresh />} variant="contained">
+            Refresh Data
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Controls */}
+      <Paper sx={{ p: 3, mb: 4, background: 'rgba(255,255,255,0.05)' }}>
+        <Grid container spacing={3} alignItems="center">
+          <Grid item xs={12} md={3}>
+            <FormControl fullWidth>
+              <InputLabel>Timeframe</InputLabel>
+              <Select
+                value={selectedTimeframe}
+                label="Timeframe"
+                onChange={(e) => setSelectedTimeframe(e.target.value)}
+              >
+                <MenuItem value="day">Last 24 Hours</MenuItem>
+                <MenuItem value="week">Last Week</MenuItem>
+                <MenuItem value="month">Last Month</MenuItem>

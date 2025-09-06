@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Typing Pattern Analysis Demo</title>
+    <style>
+        body { font-family: Arial; background: #1a1d29; color: white; padding: 20px; }
+        .typing-monitor { background: rgba(102,126,234,0.1); padding: 20px; border-radius: 15px; margin: 20px 0; border: 1px solid rgba(102,126,234,0.3); }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .metric-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; text-align: center; }
+        .metric-value { font-size: 24px; font-weight: bold; margin: 10px 0; }
+        .normal { color: #4CAF50; }
+        .warning { color: #FF9800; }
+        .danger { color: #f44336; }
+        .typing-area { width: 100%; height: 100px; padding: 15px; font-size: 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; color: white; }
+        .keystroke-visual { height: 100px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 20px 0; overflow: hidden; position: relative; }
+        .keystroke-bar { height: 100%; background: linear-gradient(to top, #667eea, #764ba2); width: 2px; position: absolute; bottom: 0; transition: height 0.1s; }
+    </style>
+</head>
+<body>
+    <h1>⌨️ AI Typing Pattern Analysis - Live Demo</h1>
+    <p><strong>For Judges:</strong> This shows how our AI analyzes typing behavior to detect emotional distress</p>
+    
+    <div class="typing-monitor">
+        <h2>🧠 Real-Time Typing Analysis</h2>
+        <textarea 
+            id="typing-input" 
+            class="typing-area" 
+            placeholder="Start typing to see AI analyze your emotional state through typing patterns..."
+            onkeydown="recordKeystroke(event)"
+            oninput="analyzeTyping()"
+        ></textarea>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div>⚡ Typing Speed</div>
+                <div class="metric-value" id="typing-speed">0</div>
+                <div>chars/second</div>
+            </div>
+            
+            <div class="metric-card">
+                <div>⏸️ Pause Pattern</div>
+                <div class="metric-value" id="pause-pattern">Normal</div>
+                <div id="pause-indicator">●</div>
+            </div>
+            
+            <div class="metric-card">
+                <div>🔄 Backspace Rate</div>
+                <div class="metric-value" id="backspace-rate">0%</div>
+                <div>error correction</div>
+            </div>
+            
+            <div class="metric-card">
+                <div>📊 Emotional State</div>
+                <div class="metric-value" id="emotional-state">Neutral</div>
+                <div id="confidence">50% confidence</div>
+            </div>
+        </div>
+        
+        <div class="typing-monitor">
+            <h3>📈 Keystroke Pressure Visualization</h3>
+            <div class="keystroke-visual" id="keystroke-visual"></div>
+            <div style="font-size: 12px; opacity: 0.7; text-align: center;">Real-time keystroke intensity (simulated pressure detection)</div>
+        </div>
+        
+        <div class="typing-monitor">
+            <h3>🤖 AI Analysis Report</h3>
+            <div id="ai-report">
+                <div>📊 <strong>Behavioral Indicators:</strong></div>
+                <ul id="indicators-list">
+                    <li>Waiting for typing input...</li>
+                </ul>
+                <div style="margin-top: 15px;">🎯 <strong>Intervention Recommendation:</strong> <span id="recommendation">None needed</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="typing-monitor">
+        <h3>🎭 Demo Scenarios</h3>
+        <button onclick="simulateStressedTyping()" style="background: #f44336; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer;">Stressed Student</button>
+        <button onclick="simulateDepressedTyping()" style="background: #9C27B0; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer;">Depressed Student</button>
+        <button onclick="simulateNormalTyping()" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer;">Normal Student</button>
+    </div>
+
+    <script>
+        let keystrokes = [];
+        let startTime = null;
+        let lastKeystroke = 0;
+        let backspaceCount = 0;
+        let totalKeys = 0;
+        
+        function recordKeystroke(event) {
+            const now = Date.now();
+            if (!startTime) startTime = now;
+            
+            // Record keystroke data
+            const timeSinceStart = now - startTime;
+            const timeSinceLast = lastKeystroke ? now - lastKeystroke : 0;
+            
+            keystrokes.push({
+                time: now,
+                key: event.key,
+                timeSinceLast: timeSinceLast,
+                pressure: Math.random() * 100 + 50 // Simulated pressure
+            });
+            
+            // Track backspaces
+            if (event.key === 'Backspace') {
+                backspaceCount++;
+            }
+            totalKeys++;
+            lastKeystroke = now;
+            
+            // Update visual
+            updateKeystrokeVisual(timeSinceLast);
+        }
+        
+        function updateKeystrokeVisual(interval) {
+            const visual = document.getElementById('keystroke-visual');
+            const bar = document.createElement('div');
+            bar.className = 'keystroke-bar';
+            
+            // Height based on keystroke interval
+            let intensity = 100;
+            if (interval > 2000) intensity = 20; // Long pause = low intensity
+            else if (interval < 100) intensity = 100; // Rapid = high intensity
+            else intensity = Math.max(20, 100 - (interval / 20));
+            
+            bar.style.height = intensity + '%';
+            bar.style.left = (visual.children.length * 3) + 'px';
+            
+            // Color based on intensity
+            if (intensity > 80) bar.style.background = 'linear-gradient(to top, #f44336, #d32f2f)';
+            else if (intensity > 60) bar.style.background = 'linear-gradient(to top, #FF9800, #F57C00)';
+            else bar.style.background = 'linear-gradient(to top, #4CAF50, #388E3C)';
+            
+            visual.appendChild(bar);
+            
+            // Keep only last 50 bars
+            if (visual.children.length > 50) {
+                visual.removeChild(visual.firstChild);
+                // Reposition remaining bars
+                Array.from(visual.children).forEach((child, index) => {
+                    child.style.left = (index * 3) + 'px';
+                });
+            }
+        }
+        
+        function analyzeTyping() {
+            if (keystrokes.length < 5) return;
+            
+            const recentKeystrokes = keystrokes.slice(-20);
+            const text = document.getElementById('typing-input').value;
+            
+            // Calculate typing speed
+            const timespan = (recentKeystrokes[recentKeystrokes.length - 1].time - recentKeystrokes[0].time) / 1000;
+            const speed = recentKeystrokes.length / Math.max(timespan, 1);
+            
+            // Analyze pauses
+            const pauses = recentKeystrokes.map(k => k.timeSinceLast).filter(t => t > 500);
+            const longPauses = pauses.filter(p => p > 2000);
+            
+            // Calculate backspace rate
+            const backspaceRate = totalKeys > 0 ? (backspaceCount / totalKeys) * 100 : 0;
+            
+            // Determine emotional state
+            let emotionalState = 'Neutral';
+            let confidence = 50;
+            let indicators = [];
+            let recommendation = 'None needed';
+            
+            if (speed > 6) {
+                emotionalState = 'Agitated/Stressed';
+                confidence = 85;
+                indicators.push('⚡ Very fast typing detected (possible anxiety)');
+                indicators.push('🔥 High keystroke intensity');
+                recommendation = 'Suggest breathing exercise';
+            } else if (speed < 1.5 && text.length > 20) {
+                emotionalState = 'Depressed/Low Energy';
+                confidence = 78;
+                indicators.push('🐌 Very slow typing detected');
+                indicators.push('⏸️ Frequent long pauses');
+                recommendation = 'Check in with student';
+            } else if (longPauses.length > 3) {
+                emotionalState = 'Contemplative/Hesitant';
+                confidence = 65;
+                indicators.push('🤔 Multiple long pauses (overthinking)');
+                recommendation = 'Monitor for decision-making stress';
+            } else if (backspaceRate > 15) {
+                emotionalState = 'Anxious/Perfectionist';
+                confidence = 72;
+                indicators.push('🔄 High error correction rate');
+                indicators.push('⚠️ Possible perfectionism/anxiety');
+                recommendation = 'Suggest self-compassion exercise';
+            }
+            
+            // Update UI
+            updateUI(speed, longPauses.length, backspaceRate, emotionalState, confidence, indicators, recommendation);
+        }
+        
+        function updateUI(speed, pauseCount, backspaceRate, emotionalState, confidence, indicators, recommendation) {
+            // Update metrics
+            document.getElementById('typing-speed').textContent = speed.toFixed(1);
+            document.getElementById('typing-speed').className = speed > 5 ? 'metric-value danger' : speed < 2 ? 'metric-value warning' : 'metric-value normal';
+            
+            document.getElementById('pause-pattern').textContent = pauseCount > 3 ? 'Frequent' : pauseCount > 1 ? 'Moderate' : 'Normal';
+            document.getElementById('pause-indicator').style.color = pauseCount > 3 ? '#f44336' : pauseCount > 1 ? '#FF9800' : '#4CAF50';
+            
+            document.getElementById('backspace-rate').textContent = backspaceRate.toFixed(1) + '%';
+            document.getElementById('backspace-rate').className = backspaceRate > 15 ? 'metric-value danger' : backspaceRate > 8 ? 'metric-value warning' : 'metric-value normal';
+            
+            document.getElementById('emotional-state').textContent = emotionalState;
+            document.getElementById('emotional-state').className = confidence > 75 ? 'metric-value danger' : confidence > 60 ? 'metric-value warning' : 'metric-value normal';
+            document.getElementById('confidence').textContent = confidence + '% confidence';
+            
+            // Update AI report
+            const indicatorsList = document.getElementById('indicators-list');
+            indicatorsList.innerHTML = indicators.length > 0 ? 
+                indicators.map(indicator => `<li>${indicator}</li>`).join('') : 
+                '<li>✅ Normal typing patterns detected</li>';
+            
+            document.getElementById('recommendation').textContent = recommendation;
+        }
+        
+        function simulateStressedTyping() {
+            const input = document.getElementById('typing-input');
+            const stressedText = "I have so many assignments due tomorrow and I haven't started any of them I'm going to fail everything this is a disaster";
+            
+            input.value = '';
+            keystrokes = [];
+            startTime = null;
+            backspaceCount = 0;
+            totalKeys = 0;
+            
+            // Simulate rapid, erratic typing
+            let index = 0;
+            const rapidType = setInterval(() => {
+                if (index < stressedText.length) {
+                    // Simulate keystroke event
+                    const fakeEvent = { key: stressedText[index] };
+                    recordKeystroke(fakeEvent);
+                    input.value += stressedText[index];
+                    
+                    // Add some backspaces for stress
+                    if (Math.random() < 0.1) {
+                        recordKeystroke({ key: 'Backspace' });
+                    }
+                    
+                    analyzeTyping();
+                    index++;
+                } else {
+                    clearInterval(rapidType);
+                }
+            }, 50 + Math.random() * 30); // Fast, erratic timing
+        }
+        
+        function simulateDepressedTyping() {
+            const input = document.getElementById('typing-input');
+            const depressedText = "i dont know what to do anymore everything feels pointless";
+            
+            input.value = '';
+            keystrokes = [];
+            startTime = null;
+            backspaceCount = 0;
+            totalKeys = 0;
+            
+            // Simulate slow typing with long pauses
+            let index = 0;
+            const slowType = setInterval(() => {
+                if (index < depressedText.length) {
+                    const fakeEvent = { key: depressedText[index] };
+                    recordKeystroke(fakeEvent);
+                    input.value += depressedText[index];
+                    analyzeTyping();
+                    index++;
+                } else {
+                    clearInterval(slowType);
+                }
+            }, 400 + Math.random() * 800); // Very slow, irregular timing
+        }
+        
+        function simulateNormalTyping() {
+            const input = document.getElementById('typing-input');
+            const normalText = "Hey, how's everyone doing today? I have some assignments to work on but feeling pretty good about them.";
+            
+            input.value = '';
+            keystrokes = [];
+            startTime = null;
+            backspaceCount = 0;
+            totalKeys = 0;
+            
+            // Simulate normal typing
+            let index = 0;
+            const normalType = setInterval(() => {
+                if (index < normalText.length) {
+                    const fakeEvent = { key: normalText[index] };
+                    recordKeystroke(fakeEvent);
+                    input.value += normalText[index];
+                    analyzeTyping();
+                    index++;
+                } else {
+                    clearInterval(normalType);
+                }
+            }, 150 + Math.random() * 100); // Normal, consistent timing
+        }
+    </script>
+</body>
+</html>

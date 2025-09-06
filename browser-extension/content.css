@@ -1,0 +1,328 @@
+/* MindfulCampus Content Script Styles */
+
+/* Floating Widget */
+#mindful-campus-widget {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 60px !important;
+  height: 60px !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3) !important;
+  cursor: pointer !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 24px !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+}
+
+#mindful-campus-widget:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Intervention Notifications */
+.mindful-campus-intervention {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  padding: 16px 20px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.3) !important;
+  z-index: 10000 !important;
+  max-width: 300px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  animation: slideInRight 0.3s ease !important;
+}
+
+.mindful-campus-intervention strong {
+  display: block !important;
+  margin-bottom: 8px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+.mindful-campus-intervention p {
+  margin: 8px 0 0 0 !important;
+  opacity: 0.95 !important;
+}
+
+.mindful-campus-intervention button {
+  background: none !important;
+  border: none !important;
+  color: white !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.mindful-campus-intervention button:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Warning Messages */
+.mindful-campus-warning {
+  margin: 8px 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  animation: fadeIn 0.3s ease !important;
+}
+
+.mindful-campus-warning > div {
+  background: rgba(255, 193, 7, 0.1) !important;
+  border: 1px solid #ffc107 !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-size: 14px !important;
+  color: #856404 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  line-height: 1.4 !important;
+}
+
+.mindful-campus-warning strong {
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+  display: block !important;
+}
+
+.mindful-campus-warning button {
+  background: none !important;
+  border: none !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  color: #856404 !important;
+  padding: 4px !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.mindful-campus-warning button:hover {
+  background-color: rgba(133, 100, 4, 0.1) !important;
+}
+
+/* Modal Overlays */
+.mindful-campus-modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  z-index: 10001 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  animation: fadeIn 0.3s ease !important;
+}
+
+.mindful-campus-modal-content {
+  background: white !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  max-width: 400px !important;
+  width: 90% !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+  color: #333 !important;
+  text-align: center !important;
+}
+
+.mindful-campus-modal h3 {
+  margin: 0 0 16px 0 !important;
+  color: #667eea !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+}
+
+.mindful-campus-modal p {
+  margin: 0 0 20px 0 !important;
+  color: #666 !important;
+  line-height: 1.5 !important;
+}
+
+.mindful-campus-modal-buttons {
+  display: flex !important;
+  justify-content: space-around !important;
+  margin-bottom: 20px !important;
+}
+
+.mindful-campus-modal button {
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  color: white !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  min-width: 80px !important;
+}
+
+.mindful-campus-modal .mood-btn {
+  font-size: 24px !important;
+  padding: 12px !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+}
+
+.mindful-campus-modal .close-btn {
+  width: 100% !important;
+  background: #667eea !important;
+  margin-top: 12px !important;
+}
+
+.mindful-campus-modal .close-btn:hover {
+  background: #5a67d8 !important;
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%) !important;
+    opacity: 0 !important;
+  }
+  to {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0 !important;
+  }
+  to {
+    opacity: 1 !important;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1) !important;
+  }
+  50% {
+    transform: scale(1.05) !important;
+  }
+  100% {
+    transform: scale(1) !important;
+  }
+}
+
+/* Breathing Exercise Visualization */
+.mindful-campus-breathing-circle {
+  width: 150px !important;
+  height: 150px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(45deg, #667eea, #764ba2) !important;
+  margin: 0 auto 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  color: white !important;
+  transition: transform 4s ease-in-out !important;
+}
+
+.mindful-campus-breathing-circle.inhale {
+  transform: scale(1.3) !important;
+}
+
+.mindful-campus-breathing-circle.exhale {
+  transform: scale(1) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #mindful-campus-widget {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 20px !important;
+  }
+
+  .mindful-campus-intervention {
+    top: 16px !important;
+    right: 16px !important;
+    left: 16px !important;
+    max-width: none !important;
+    padding: 14px 16px !important;
+  }
+
+  .mindful-campus-modal-content {
+    padding: 20px !important;
+    width: 95% !important;
+    margin: 16px !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  #mindful-campus-widget {
+    border: 2px solid white !important;
+  }
+
+  .mindful-campus-intervention {
+    border: 2px solid white !important;
+  }
+
+  .mindful-campus-warning > div {
+    border: 2px solid #ffc107 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  #mindful-campus-widget {
+    transition: none !important;
+  }
+
+  .mindful-campus-intervention {
+    animation: none !important;
+  }
+
+  .mindful-campus-warning {
+    animation: none !important;
+  }
+
+  .mindful-campus-modal {
+    animation: none !important;
+  }
+
+  .mindful-campus-breathing-circle {
+    transition: none !important;
+  }
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  .mindful-campus-modal-content {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+  }
+
+  .mindful-campus-modal h3 {
+    color: #90cdf4 !important;
+  }
+
+  .mindful-campus-modal p {
+    color: #cbd5e0 !important;
+  }
+}
